@@ -1,7 +1,12 @@
 module DirectoryListing where
 
 import System.Directory
-import System.IO
+--import System.IO
+--import Text.Regex.Posix
+import System.FilePath
+import Text.Regex(subRegex,mkRegex)
+substitute x y s = subRegex (mkRegex x) s y
+
 
 --showPath :: FilePath -> String
 showPath s = s
@@ -15,7 +20,13 @@ data FileType = Directory FilePath
 
 instance Show FileInfo where
     show inf = (path inf) ++ (name inf) ++ (ext inf)
-    
+
+isFile (File a) = True
+isFile _ = False
+
+isDirectory a = not $ isFile a
+
+
 getExt :: FilePath -> String    
 getExt s = reverse $ takeWhile (\s -> s /= '.') (reverse s)
 
@@ -38,6 +49,13 @@ classify f = do
 
 removeFakeDirs = filter (\f -> f /= "." && f /= ".." && (head f) /= '.')
 
+filterFile = filter isFile 
+        
+
+renameFile files regFrom regTo = "foo"
+
+testRegex files regFrom regTo = files
+
 main = do 
     putStrLn "* Hello Directory *"
     cur <- getCurrentDirectory
@@ -49,4 +67,5 @@ main = do
 
 cur = getCurrentDirectory
 
+tstFile = dropExtension "foo_123_456.txt"
 
