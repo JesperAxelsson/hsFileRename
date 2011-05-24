@@ -23,8 +23,11 @@ getName :: FilePath -> String
 getName path = reverse $ dropWhile (\s -> s /= '.') (reverse path)
 
 
-classifyDirContent content = map classify content
+classifyDirContent :: [FilePath] -> IO [FileType]
+classifyDirContent content = mapM classify content
+                             
 
+classify :: FilePath -> IO FileType
 classify f = do
             doesF <- doesFileExist f 
             if doesF then return $ File f
@@ -39,5 +42,11 @@ main = do
     putStrLn "* Hello Directory *"
     cur <- getCurrentDirectory
     paths <-  getDirectoryContents cur
---    mapM_ putStrLn $ classifyDirContent $ removeFakeDirs paths
+    cont <- classifyDirContent $ removeFakeDirs paths
+    mapM_ (putStrLn . show)  cont
     return ()
+
+
+cur = getCurrentDirectory
+
+
