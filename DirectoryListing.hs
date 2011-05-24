@@ -1,18 +1,12 @@
 module DirectoryListing where
 
 import System.Directory
---import System.IO
---import Text.Regex.Posix
-import System.FilePath
-import Text.Regex(subRegex,mkRegex)
-substitute x y s = subRegex (mkRegex x) s y
 
-
---showPath :: FilePath -> String
-showPath s = s
-
-data FileInfo = FileInfo { path :: String, name :: String, ext :: String }
+--data FileInfo = FileInfo { path :: String, name :: String, ext :: String }
 --    deriving (Show)
+
+--instance Show FileInfo where
+--    show inf = (path inf) ++ (name inf) ++ (ext inf)
 
 data FileType = Directory FilePath
               | File FilePath
@@ -26,21 +20,16 @@ instance Get FileType where
     get (Directory a) = a    
     
 
-instance Show FileInfo where
-    show inf = (path inf) ++ (name inf) ++ (ext inf)
-
 isFile (File a) = True
 isFile _ = False
 
 isDirectory a = not $ isFile a
 
+--getExt :: FilePath -> String    
+--getExt s = reverse $ takeWhile (\s -> s /= '.') (reverse s)
 
-getExt :: FilePath -> String    
-getExt s = reverse $ takeWhile (\s -> s /= '.') (reverse s)
-
-getName :: FilePath -> String
-getName path = reverse $ dropWhile (\s -> s /= '.') (reverse path)
-
+--getName :: FilePath -> String
+--getName path = reverse $ dropWhile (\s -> s /= '.') (reverse path)
 
 classifyDirContent :: [FilePath] -> IO [FileType]
 classifyDirContent content = mapM classify content
@@ -57,13 +46,10 @@ classify f = do
 
 removeFakeDirs = filter (\f -> f /= "." && f /= ".." && (head f) /= '.')
 
+
 filterFile = filter isFile 
 filterDirectory = filter isDirectory 
         
-
-renameFile files regFrom regTo = "foo"
-
-testRegex files regFrom regTo = files
 
 getFiles path = do
     paths <- getDirectoryContents path
@@ -84,7 +70,5 @@ testShite = do
     return ()
 
 
-cur = getCurrentDirectory
-
-tstFile = dropExtension "foo_123_456.txt"
+cur = getCurrentDirectory 
 

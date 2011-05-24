@@ -3,10 +3,9 @@ module Main where
 import DirectoryListing
 import FileRename
 
-import Text.Regex(subRegex,mkRegex)
-substitute x y s = subRegex (mkRegex x) s y
+regx = "([0-9]+)[^0-9]+([0-9]+)"  
 
-renameFile files regFrom regTo = "foo"
-
-testRegex files regFrom regTo = files
-main = testShite
+main = do
+    files <- getFiles ""
+    mapM_ putStrLn $ map (renameFile regx "\\2 \\1") (filterExt ".txt" files)
+    
