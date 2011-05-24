@@ -18,6 +18,14 @@ data FileType = Directory FilePath
               | File FilePath
         deriving(Show)
 
+class Get a where
+    get :: a -> String
+
+instance Get FileType where
+    get (File a) = a
+    get (Directory a) = a    
+    
+
 instance Show FileInfo where
     show inf = (path inf) ++ (name inf) ++ (ext inf)
 
@@ -50,13 +58,24 @@ classify f = do
 removeFakeDirs = filter (\f -> f /= "." && f /= ".." && (head f) /= '.')
 
 filterFile = filter isFile 
+filterDirectory = filter isDirectory 
         
 
 renameFile files regFrom regTo = "foo"
 
 testRegex files regFrom regTo = files
 
-main = do 
+getFiles path = do
+    paths <- getDirectoryContents path
+    cont <- classifyDirContent $ removeFakeDirs paths
+    return $ map get $ filterFile cont
+
+getDirectories path = do
+    paths <- getDirectoryContents path
+    cont <- classifyDirContent $ removeFakeDirs paths
+    return $ map get $ filterDirectory cont
+
+testShite = do 
     putStrLn "* Hello Directory *"
     cur <- getCurrentDirectory
     paths <-  getDirectoryContents cur
